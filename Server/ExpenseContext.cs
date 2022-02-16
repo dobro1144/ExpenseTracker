@@ -24,7 +24,6 @@ namespace Server
                 new Category { Id = 5, Name = "Entertainment" }
             );
 
-
             base.OnModelCreating(modelBuilder);
         }
     }
