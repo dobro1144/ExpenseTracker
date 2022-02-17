@@ -56,14 +56,19 @@ namespace Server.Controllers
                 return BadRequest();
 
             var item = await context.Categories.FindAsync(id);
-            if (item == null)
-                return NotFound();
-            item.Name = updateItem.Name;
+            if (item != null)
+                context.Categories.Remove(item);
+            else
+                updateItem.Id = 0;
+            context.Categories.Add(updateItem);
             try {
                 await context.SaveChangesAsync();
             } catch {
                 return BadRequest();
             }
+
+            if (item == null)
+                return CreatedAtAction("Get", new { id = updateItem.Id }, updateItem);
             return Ok();
         }
 
