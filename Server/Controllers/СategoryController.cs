@@ -1,9 +1,15 @@
+using Entities.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UseCases.Category.Commands.Create;
+using UseCases.Category.Commands.Delete;
+using UseCases.Category.Commands.Update;
+using UseCases.Category.Dto;
+using UseCases.Category.Queries.GetAll;
+using UseCases.Category.Queries.GetById;
 
 namespace Server.Controllers
 {
@@ -11,77 +17,54 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class ÑategoryController : ControllerBase
     {
-        private readonly ILogger<ÑategoryController> logger;
-        private readonly ExpenseContext context;
+        readonly ILogger<ÑategoryController> _logger;
+        readonly ISender _sender;
 
-        public ÑategoryController(ILogger<ÑategoryController> logger, ExpenseContext context)
+        public ÑategoryController(ILogger<ÑategoryController> logger, ISender sender)
         {
-            this.logger = logger;
-            this.context = context;
+            _logger = logger;
+            _sender = sender;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Category>> GetAsync()
         {
-            return await context.Categories.ToArrayAsync();
+            return await _sender.Send(new GetAllCategoriesQuery());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetAsync(int id)
         {
-            var item = await context.Categories.FindAsync(id);
+            var item = await _sender.Send(new GetCategoryByIdQuery { Id = id });
             if (item == null)
                 return NotFound();
             return item;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> PostAsync(Category item)
+        public async Task<ActionResult<Category>> PostAsync([FromBody]CreateCategoryDto dto)
         {
-            if (await context.Categories.AnyAsync(x => x.Name == item.Name))
-                return Conflict();
-            await context.Categories.AddAsync(item);
-            try {
-                await context.SaveChangesAsync();
-            } catch {
+            var item = await _sender.Send(new CreateCategoryCommand { Dto = dto });
+            if (item == null)
                 return BadRequest();
-            }
             return CreatedAtAction("Get", new { id = item.Id }, item);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Category updateItem)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody]Category updateItem)
         {
-            if (id != updateItem.Id)
+            var result = await _sender.Send(new UpdateCategoryCommand { Category = updateItem });
+            if (!result)
                 return BadRequest();
-
-            var item = await context.Categories.FindAsync(id);
-            if (item != null)
-                context.Categories.Remove(item);
-            else
-                updateItem.Id = 0;
-            context.Categories.Add(updateItem);
-            try {
-                await context.SaveChangesAsync();
-            } catch {
-                return BadRequest();
-            }
-
-            if (item == null)
-                return CreatedAtAction("Get", new { id = updateItem.Id }, updateItem);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var item = await context.Categories.FindAsync(id);
-            if (item == null)
+            var result = await _sender.Send(new DeleteCategoryCommand { Id = id });
+            if (!result)
                 return NotFound();
-
-            context.Categories.Remove(item);
-            await context.SaveChangesAsync();
-
             return Ok();
         }
     }
