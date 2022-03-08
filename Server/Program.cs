@@ -24,6 +24,7 @@ namespace Server
             builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });
             builder.Services.AddMediatR(typeof(GetCategoryByIdQuery));
             builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["MsSql"]));
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();
 
@@ -32,6 +33,7 @@ namespace Server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

@@ -6,8 +6,8 @@ namespace Infrastructure.Implementation
 {
     public class AppDbContext : DbContext, IDbContext
     {
-        public DbSet<Expense> Expenses { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Expense> Expenses { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -17,7 +17,6 @@ namespace Infrastructure.Implementation
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
-            modelBuilder.Entity<Category>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Food" },
                 new Category { Id = 2, Name = "Transport" },

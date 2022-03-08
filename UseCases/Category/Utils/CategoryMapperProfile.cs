@@ -7,7 +7,9 @@ namespace UseCases.Category.Utils
     {
         public CategoryMapperProfile()
         {
+            CreateMap<Entities.Models.Category, CategoryDto>();
             CreateMap<CreateCategoryDto, Entities.Models.Category>();
+            CreateMap<UpdateCategoryDto, Entities.Models.Category>();
         }
     }
 }

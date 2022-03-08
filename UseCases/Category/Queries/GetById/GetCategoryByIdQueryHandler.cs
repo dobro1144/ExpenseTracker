@@ -3,10 +3,11 @@ using Infrastructure.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Category.Dto;
 
 namespace UseCases.Category.Queries.GetById
 {
-    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, Entities.Models.Category>
+    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto?>
     {
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
@@ -17,9 +18,12 @@ namespace UseCases.Category.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<Entities.Models.Category> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CategoryDto?> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Categories.FindAsync(request.Id);
+            var category =  await _dbContext.Categories.FindAsync(new object[] { request.Id }, cancellationToken);
+            if (category == null)
+                return null;
+            return _mapper.Map<CategoryDto>(category);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace UseCases.Expense.Commands.Update
 {
     public class UpdateExpenseCommand : IRequest<bool>
     {
-        public ExpenseDto Expense { get; set; }
+        public int Id { get; set; }
+        public UpdateExpenseDto Dto { get; set; } = null!;
     }
 }

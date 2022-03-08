@@ -1,6 +1,6 @@
-namespace Entities.Models
+﻿namespace UseCases.Category.Dto
 {
-    public class Category
+    public class CategoryDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

@@ -1,8 +1,6 @@
-using Entities.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Category.Commands.Create;
 using UseCases.Category.Commands.Delete;
@@ -17,52 +15,50 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class ÑategoryController : ControllerBase
     {
-        readonly ILogger<ÑategoryController> _logger;
         readonly ISender _sender;
 
-        public ÑategoryController(ILogger<ÑategoryController> logger, ISender sender)
+        public ÑategoryController(ISender sender)
         {
-            _logger = logger;
             _sender = sender;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Category>> GetAsync()
+        public async Task<CategoryDto[]> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetAllCategoriesQuery());
+            return await _sender.Send(new GetAllCategoriesQuery(), cancellationToken);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetAsync(int id)
+        public async Task<ActionResult<CategoryDto>> GetAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
-            var item = await _sender.Send(new GetCategoryByIdQuery { Id = id });
+            var item = await _sender.Send(new GetCategoryByIdQuery { Id = id }, cancellationToken);
             if (item == null)
                 return NotFound();
             return item;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> PostAsync([FromBody]CreateCategoryDto dto)
+        public async Task<ActionResult<CategoryDto>> CreateAsync([FromBody]CreateCategoryDto dto, CancellationToken cancellationToken)
         {
-            var item = await _sender.Send(new CreateCategoryCommand { Dto = dto });
+            var item = await _sender.Send(new CreateCategoryCommand { Dto = dto }, cancellationToken);
             if (item == null)
                 return BadRequest();
             return CreatedAtAction("Get", new { id = item.Id }, item);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody]Category updateItem)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute]int id, [FromBody]UpdateCategoryDto updateItem, CancellationToken cancellationToken)
         {
-            var result = await _sender.Send(new UpdateCategoryCommand { Category = updateItem });
+            var result = await _sender.Send(new UpdateCategoryCommand { Id = id, Dto = updateItem }, cancellationToken);
             if (!result)
                 return BadRequest();
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
-            var result = await _sender.Send(new DeleteCategoryCommand { Id = id });
+            var result = await _sender.Send(new DeleteCategoryCommand { Id = id }, cancellationToken);
             if (!result)
                 return NotFound();
             return Ok();

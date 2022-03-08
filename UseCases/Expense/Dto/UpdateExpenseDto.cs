@@ -1,6 +1,6 @@
 ﻿namespace UseCases.Expense.Dto
 {
-    public class CreateExpenseDto
+    public class UpdateExpenseDto
     {
         public int CategoryId { get; set; }
         public double Amount { get; set; }

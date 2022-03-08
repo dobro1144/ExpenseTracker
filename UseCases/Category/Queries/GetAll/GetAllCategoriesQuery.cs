@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using System.Collections.Generic;
+using UseCases.Category.Dto;
 
 namespace UseCases.Category.Queries.GetAll
 {
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<Entities.Models.Category>>
+    public class GetAllCategoriesQuery : IRequest<CategoryDto[]>
     {
     }
 }

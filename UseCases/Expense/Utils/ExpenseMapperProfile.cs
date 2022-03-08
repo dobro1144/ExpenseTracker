@@ -9,6 +9,7 @@ namespace UseCases.Expense.Utils
         {
             CreateMap<Entities.Models.Expense, ExpenseDto>();
             CreateMap<CreateExpenseDto, Entities.Models.Expense>();
+            CreateMap<UpdateExpenseDto, Entities.Models.Expense>();
         }
     }
 }

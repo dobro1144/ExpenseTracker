@@ -19,18 +19,16 @@ namespace UseCases.Expense.Commands.Update
 
         public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Expenses.FindAsync(request.Expense.Id);
+            var item = await _dbContext.Expenses.FindAsync(new object[] { request.Id }, cancellationToken);
             if (item == null)
                 return false;
-            item.CategoryId = request.Expense.CategoryId;
-            item.Amount = request.Expense.Amount;
-            item.Commentary = request.Expense.Commentary;
+            _mapper.Map(request.Dto, item);
             try {
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return true;
             } catch {
                 return false;
             }
-            return true;
         }
     }
 }

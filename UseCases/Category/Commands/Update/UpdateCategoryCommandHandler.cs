@@ -19,16 +19,16 @@ namespace UseCases.Category.Commands.Update
 
         public async Task<bool> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Categories.FindAsync(request.Category.Id);
+            var item = await _dbContext.Categories.FindAsync(new object[] { request.Id }, cancellationToken);
             if (item == null)
                 return false;
-            item.Name = request.Category.Name;
+            _mapper.Map(request.Dto, item);
             try {
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return true;
             } catch {
                 return false;
             }
-            return true;
         }
     }
 }

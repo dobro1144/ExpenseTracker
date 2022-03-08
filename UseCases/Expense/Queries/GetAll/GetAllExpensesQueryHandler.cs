@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Queries.GetAll
 {
-    public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, IEnumerable<ExpenseDto>>
+    public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, ExpenseDto[]>
     {
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
@@ -21,10 +20,11 @@ namespace UseCases.Expense.Queries.GetAll
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ExpenseDto>> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
+        public async Task<ExpenseDto[]> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
         {
-            var expenses = await _dbContext.Expenses.ToArrayAsync();
-            return expenses.Select(x => _mapper.Map<ExpenseDto>(x));
+            return await _dbContext.Expenses
+                .ProjectTo<ExpenseDto>(_mapper.ConfigurationProvider)
+                .ToArrayAsync(cancellationToken);
         }
     }
 }
