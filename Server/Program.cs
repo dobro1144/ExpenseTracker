@@ -1,7 +1,13 @@
+using Infrastructure.Implementation;
+using Infrastructure.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UseCases.Category.Queries.GetById;
+using UseCases.Category.Utils;
+using UseCases.Expense.Utils;
 
 namespace Server
 {
@@ -15,7 +21,10 @@ namespace Server
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<ExpenseContext>(options => options.UseSqlServer(builder.Configuration["ConnectionString"]));
+            builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });
+            builder.Services.AddMediatR(typeof(GetCategoryByIdQuery));
+            builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["MsSql"]));
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();
 
@@ -24,10 +33,11 @@ namespace Server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+
             app.Run();
         }
     }

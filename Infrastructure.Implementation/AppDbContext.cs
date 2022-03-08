@@ -1,21 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Server.Models;
+﻿using Entities.Models;
+using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace Server
+namespace Infrastructure.Implementation
 {
-    public class ExpenseContext : DbContext
+    public class AppDbContext : DbContext, IDbContext
     {
-        public DbSet<Expense> Expenses { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Expense> Expenses { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
 
-        public ExpenseContext(DbContextOptions<ExpenseContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Category>().HasAlternateKey(x => x.Name);
+            modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Food" },
                 new Category { Id = 2, Name = "Transport" },

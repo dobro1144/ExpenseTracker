@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Server.Models;
-using System.Collections.Generic;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Expense.Commands.Create;
+using UseCases.Expense.Commands.Delete;
+using UseCases.Expense.Commands.Update;
+using UseCases.Expense.Dto;
+using UseCases.Expense.Queries.GetAll;
+using UseCases.Expense.Queries.GetById;
 
 namespace Server.Controllers
 {
@@ -11,78 +15,52 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class ExpenseController : Controller
     {
-        private readonly ILogger<ExpenseController> logger;
-        private readonly ExpenseContext context;
+        readonly ISender _sender;
 
-        public ExpenseController(ILogger<ExpenseController> logger, ExpenseContext context)
+        public ExpenseController(ISender sender)
         {
-            this.logger = logger;
-            this.context = context;
+            _sender = sender;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Expense>> GetAsync()
+        public async Task<ExpenseDto[]> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await context.Expenses.ToArrayAsync();
+            return await _sender.Send(new GetAllExpensesQuery(), cancellationToken);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Expense>> GetAsync(int id)
+        public async Task<ActionResult<ExpenseDto>> GetAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
-            var item = await context.Expenses.FindAsync(id);
+            var item = await _sender.Send(new GetExpenseByIdQuery { Id = id }, cancellationToken);
             if (item == null)
                 return NotFound();
             return item;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Expense>> PostAsync(Expense item)
+        public async Task<ActionResult<ExpenseDto>> CreateAsync([FromBody]CreateExpenseDto dto, CancellationToken cancellationToken)
         {
-            await context.Expenses.AddAsync(item);
-            try {
-                await context.SaveChangesAsync();
-            } catch {
+            var item = await _sender.Send(new CreateExpenseCommand { Dto = dto }, cancellationToken);
+            if (item == null)
                 return BadRequest();
-            }
             return CreatedAtAction("Get", new { id = item.Id }, item);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Expense updateItem)
+        public async Task<IActionResult> UpdateAsync([FromRoute]int id, [FromBody]UpdateExpenseDto updateItem, CancellationToken cancellationToken)
         {
-            if (id != updateItem.Id)
+            var result = await _sender.Send(new UpdateExpenseCommand { Id = id, Dto = updateItem }, cancellationToken);
+            if (!result)
                 return BadRequest();
-
-            var item = await context.Expenses.FindAsync(id);
-            if (item == null) {
-                updateItem.Id = 0;
-                await context.Expenses.AddAsync(updateItem);
-            } else {
-                item.CategoryId = updateItem.CategoryId;
-                item.Amount = updateItem.Amount;
-                item.Commentary = updateItem.Commentary;
-            }
-            try {
-                await context.SaveChangesAsync();
-            } catch {
-                return BadRequest();
-            }
-
-            if (item == null)
-                return CreatedAtAction("Get", new { id = updateItem.Id }, updateItem);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeletAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
-            var item = await context.Expenses.FindAsync(id);
-            if (item == null)
+            var result = await _sender.Send(new DeleteExpenseCommand { Id = id }, cancellationToken);
+            if (!result)
                 return NotFound();
-
-            context.Expenses.Remove(item);
-            await context.SaveChangesAsync();
-
             return Ok();
         }
     }
