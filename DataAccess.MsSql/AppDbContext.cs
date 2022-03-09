@@ -2,7 +2,7 @@
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Implementation
+namespace DataAccess.MsSql
 {
     public class AppDbContext : DbContext, IDbContext
     {

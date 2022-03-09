@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Interfaces",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{7E410D4D-964A-41CF-BDC9-ADF95524EC36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MsSql", "Infrastructure.Implementation\DataAccess.MsSql.csproj", "{A65AA075-1F3B-4FB3-81E9-6100318E0FE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MsSql", "DataAccess.MsSql\DataAccess.MsSql.csproj", "{A65AA075-1F3B-4FB3-81E9-6100318E0FE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{51208794-2FC9-4622-9DAB-1F16738DB8B5}"
 EndProject
