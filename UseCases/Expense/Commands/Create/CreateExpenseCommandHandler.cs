@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Interfaces;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Expense.Dto;
@@ -22,6 +23,7 @@ namespace UseCases.Expense.Commands.Create
         {
             var expense = _mapper.Map<Entities.Models.Expense>(request.Dto);
             await _dbContext.Expenses.AddAsync(expense, cancellationToken);
+            expense.CreatedAtUtc = DateTime.UtcNow;
             try {
                 await _dbContext.SaveChangesAsync(cancellationToken);
             } catch {
