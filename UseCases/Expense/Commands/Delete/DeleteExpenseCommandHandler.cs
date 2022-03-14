@@ -16,10 +16,13 @@ namespace UseCases.Expense.Commands.Delete
 
         public async Task<bool> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
         {
-            _dbContext.Expenses.Remove(new Entities.Models.Expense { Id = request.Id });
+            var item = await _dbContext.Expenses.FindAsync(new object[] { request.Id }, cancellationToken);
+            if (item == null)
+                return false;
+            _dbContext.Expenses.Remove(item);
             try {
-                var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
-                return nUpdated > 0;
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return true;
             } catch {
                 return false;
             }
