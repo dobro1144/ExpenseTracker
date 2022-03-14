@@ -11,10 +11,10 @@ namespace UseCases.Expense.Queries.GetAll
 {
     public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, ExpenseDto[]>
     {
-        readonly IDbContext _dbContext;
+        readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetAllExpensesQueryHandler(IDbContext dbContext, IMapper mapper)
+        public GetAllExpensesQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;

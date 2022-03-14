@@ -56,7 +56,7 @@ namespace Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletAsync([FromRoute]int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
             var result = await _sender.Send(new DeleteExpenseCommand { Id = id }, cancellationToken);
             if (!result)

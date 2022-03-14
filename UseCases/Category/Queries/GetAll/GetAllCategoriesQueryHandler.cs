@@ -11,10 +11,10 @@ namespace UseCases.Category.Queries.GetAll
 {
     public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, CategoryDto[]>
     {
-        readonly IDbContext _dbContext;
+        readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetAllCategoriesQueryHandler(IDbContext dbContext, IMapper mapper)
+        public GetAllCategoriesQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;

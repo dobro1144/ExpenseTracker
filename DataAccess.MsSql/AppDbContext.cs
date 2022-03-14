@@ -1,13 +1,17 @@
 ﻿using Entities.Models;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DataAccess.MsSql
 {
-    public class AppDbContext : DbContext, IDbContext
+    public class AppDbContext : DbContext, IDbContext, IReadDbContext
     {
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
+
+        IQueryable<Expense> IReadDbContext.Expenses => Expenses.AsNoTracking();
+        IQueryable<Category> IReadDbContext.Categories => Categories.AsNoTracking();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
