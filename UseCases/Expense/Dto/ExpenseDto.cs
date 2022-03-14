@@ -9,5 +9,6 @@ namespace UseCases.Expense.Dto
         public double Amount { get; set; }
         public string? Comment { get; set; }
         public DateTime CreatedAtUtc { get; set; }
+        public byte[] Timestamp { get; set; } = null!;
     }
 }

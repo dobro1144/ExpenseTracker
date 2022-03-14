@@ -15,6 +15,8 @@ namespace DataAccess.MsSql
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Category>().Property(x => x.Timestamp).IsRowVersion();
+            modelBuilder.Entity<Expense>().Property(x => x.Timestamp).IsRowVersion();
             modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Food" },

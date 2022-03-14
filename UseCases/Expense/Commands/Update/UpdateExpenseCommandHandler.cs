@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UseCases.Expense.Commands.Update
 {
-    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, bool>
+    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, byte[]?>
     {
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
@@ -17,17 +17,17 @@ namespace UseCases.Expense.Commands.Update
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
+        public async Task<byte[]?> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
             var item = await _dbContext.Expenses.FindAsync(new object[] { request.Id }, cancellationToken);
             if (item == null)
-                return false;
+                return null;
             _mapper.Map(request.Dto, item);
             try {
                 await _dbContext.SaveChangesAsync(cancellationToken);
-                return true;
+                return item.Timestamp;
             } catch {
-                return false;
+                return null;
             }
         }
     }
