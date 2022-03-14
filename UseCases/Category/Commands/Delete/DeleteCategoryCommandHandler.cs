@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Infrastructure.Interfaces;
+﻿using Infrastructure.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,10 +16,13 @@ namespace UseCases.Category.Commands.Delete
 
         public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            _dbContext.Categories.Remove(new Entities.Models.Category { Id = request.Id });
+            var item = await _dbContext.Categories.FindAsync(new object[] { request.Id }, cancellationToken);
+            if (item == null)
+                return false;
+            _dbContext.Categories.Remove(item);
             try {
-                var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
-                return nUpdated > 0;
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return true;
             } catch {
                 return false;
             }

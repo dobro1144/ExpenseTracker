@@ -34,7 +34,7 @@ namespace Server.Controllers
             var item = await _sender.Send(new GetExpenseByIdQuery { Id = id }, cancellationToken);
             if (item == null)
                 return NotFound();
-            return item;
+            return Ok(item);
         }
 
         [HttpPost]
@@ -50,13 +50,13 @@ namespace Server.Controllers
         public async Task<IActionResult> UpdateAsync([FromRoute]int id, [FromBody]UpdateExpenseDto updateItem, CancellationToken cancellationToken)
         {
             var result = await _sender.Send(new UpdateExpenseCommand { Id = id, Dto = updateItem }, cancellationToken);
-            if (!result)
+            if (result == null)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletAsync([FromRoute]int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteAsync([FromRoute]int id, CancellationToken cancellationToken)
         {
             var result = await _sender.Send(new DeleteExpenseCommand { Id = id }, cancellationToken);
             if (!result)
