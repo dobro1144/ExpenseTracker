@@ -1,11 +1,13 @@
 ﻿using Infrastructure.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Exceptions;
 
 namespace UseCases.Category.Commands.Delete
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, bool>
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
     {
         readonly IDbContext _dbContext;
 
@@ -14,18 +16,15 @@ namespace UseCases.Category.Commands.Delete
             _dbContext = dbContext;
         }
 
-        public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Categories.FindAsync(new object[] { request.Id }, cancellationToken);
+            var item = await _dbContext.Categories
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (item == null)
-                return false;
+                throw new EntityNotFoundException();
             _dbContext.Categories.Remove(item);
-            try {
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                return true;
-            } catch {
-                return false;
-            }
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return Unit.Value;
         }
     }
 }

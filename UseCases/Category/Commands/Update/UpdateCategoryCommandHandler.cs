@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Infrastructure.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Exceptions;
 
 namespace UseCases.Category.Commands.Update
 {
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, byte[]?>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, byte[]>
     {
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
@@ -17,18 +19,15 @@ namespace UseCases.Category.Commands.Update
             _mapper = mapper;
         }
 
-        public async Task<byte[]?> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<byte[]> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Categories.FindAsync(new object[] { request.Id }, cancellationToken);
+            var item = await _dbContext.Categories
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (item == null)
-                return null;
+                throw new EntityNotFoundException();
             _mapper.Map(request.Dto, item);
-            try {
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                return item.Timestamp;
-            } catch {
-                return null;
-            }
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return item.Timestamp;
         }
     }
 }

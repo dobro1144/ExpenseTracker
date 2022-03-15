@@ -3,7 +3,7 @@ using UseCases.Category.Dto;
 
 namespace UseCases.Category.Commands.Update
 {
-    public class UpdateCategoryCommand : IRequest<byte[]?>
+    public class UpdateCategoryCommand : IRequest<byte[]>
     {
         public int Id { get; set; }
         public UpdateCategoryDto Dto { get; set; } = null!;
