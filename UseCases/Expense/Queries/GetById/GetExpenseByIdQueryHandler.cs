@@ -4,11 +4,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Exceptions;
 using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Queries.GetById
 {
-    public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDto?>
+    public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDto>
     {
         readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
@@ -19,12 +20,12 @@ namespace UseCases.Expense.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<ExpenseDto?> Handle(GetExpenseByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ExpenseDto> Handle(GetExpenseByIdQuery request, CancellationToken cancellationToken)
         {
             var expense = await _dbContext.Expenses
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (expense == null)
-                return null;
+                throw new EntityNotFoundException();
             return _mapper.Map<ExpenseDto>(expense);
         }
     }

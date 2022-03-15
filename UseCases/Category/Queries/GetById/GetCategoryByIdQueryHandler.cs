@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Category.Dto;
+using UseCases.Exceptions;
 
 namespace UseCases.Category.Queries.GetById
 {
-    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto?>
+    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto>
     {
         readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
@@ -19,12 +20,12 @@ namespace UseCases.Category.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<CategoryDto?> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var category =  await _dbContext.Categories
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (category == null)
-                return null;
+                throw new EntityNotFoundException();
             return _mapper.Map<CategoryDto>(category);
         }
     }

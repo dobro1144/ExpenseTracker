@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Server.Utils;
 using UseCases.Category.Queries.GetById;
 using UseCases.Category.Utils;
 using UseCases.Expense.Utils;
@@ -36,6 +37,7 @@ namespace Server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseExceptionHandlerMiddleware();
             app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthorization();
