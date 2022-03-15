@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Expense.Dto;
@@ -22,8 +23,21 @@ namespace UseCases.Expense.Queries.GetAll
 
         public async Task<ExpenseDto[]> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Expenses
-                .ProjectTo<ExpenseDto>(_mapper.ConfigurationProvider)
+            var query = _dbContext.Expenses;
+            if (request.Dto.CategoryId.HasValue)
+                query = query.Where(x => x.CategoryId == request.Dto.CategoryId.Value);
+            if (request.Dto.AmountMin.HasValue)
+                query = query.Where(x => x.Amount >= request.Dto.AmountMin.Value);
+            if (request.Dto.AmountMax.HasValue)
+                query = query.Where(x => x.Amount <= request.Dto.AmountMax.Value);
+            if (request.Dto.CreatedFromUtc.HasValue)
+                query = query.Where(x => x.CreatedAtUtc >= request.Dto.CreatedFromUtc.Value);
+            if (request.Dto.CreatedToUtc.HasValue)
+                query = query.Where(x => x.CreatedAtUtc <= request.Dto.CreatedToUtc.Value);
+            if (request.Dto.Comment != null)
+                query = query.Where(x => x.Comment == request.Dto.Comment);
+
+            return await query.ProjectTo<ExpenseDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync(cancellationToken);
         }
     }

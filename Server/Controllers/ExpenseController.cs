@@ -23,7 +23,7 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ExpenseDto[]> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<ExpenseDto[]> GetAllAsync([FromQuery]GetAllExpensesQueryDto dto, CancellationToken cancellationToken)
         {
             return await _sender.Send(new GetAllExpensesQuery(), cancellationToken);
         }
