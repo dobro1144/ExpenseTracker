@@ -24,16 +24,16 @@ namespace UseCases.Expense.Queries.GetAll
         public async Task<ExpenseDto[]> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
         {
             var query = _dbContext.Expenses;
-            if (request.Dto.CategoryId.HasValue)
-                query = query.Where(x => x.CategoryId == request.Dto.CategoryId.Value);
+            if (request.Dto.Categories != null)
+                query = query.Where(x => request.Dto.Categories.Contains(x.CategoryId));
             if (request.Dto.AmountMin.HasValue)
                 query = query.Where(x => x.Amount >= request.Dto.AmountMin.Value);
             if (request.Dto.AmountMax.HasValue)
                 query = query.Where(x => x.Amount <= request.Dto.AmountMax.Value);
-            if (request.Dto.CreatedFromUtc.HasValue)
-                query = query.Where(x => x.CreatedAtUtc >= request.Dto.CreatedFromUtc.Value);
-            if (request.Dto.CreatedToUtc.HasValue)
-                query = query.Where(x => x.CreatedAtUtc <= request.Dto.CreatedToUtc.Value);
+            if (request.Dto.FromDate.HasValue)
+                query = query.Where(x => x.CreatedAtUtc >= request.Dto.FromDate.Value);
+            if (request.Dto.ToDate.HasValue)
+                query = query.Where(x => x.CreatedAtUtc <= request.Dto.ToDate.Value);
             if (request.Dto.Comment != null)
                 query = query.Where(x => x.Comment == request.Dto.Comment);
 
