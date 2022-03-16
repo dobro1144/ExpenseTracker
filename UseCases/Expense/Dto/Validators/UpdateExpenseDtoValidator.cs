@@ -6,9 +6,9 @@ namespace UseCases.Expense.Dto.Validators
     {
         public UpdateExpenseDtoValidator()
         {
-            RuleFor(x => x.CategoryId).NotEmpty().GreaterThan(0);
-            RuleFor(x => x.Amount).NotEmpty().GreaterThanOrEqualTo(0);
-            RuleFor(x => x.Comment).MinimumLength(450).When(x => x.Comment != null);
+            RuleFor(x => x.CategoryId).NotNull().GreaterThan(0);
+            RuleFor(x => x.Amount).NotNull().GreaterThanOrEqualTo(0);
+            RuleFor(x => x.Comment).MaximumLength(450).When(x => x.Comment != null);
         }
     }
 }
