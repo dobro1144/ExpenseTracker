@@ -1,4 +1,5 @@
 using DataAccess.MsSql;
+using FluentValidation.AspNetCore;
 using Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.Utils;
+using UseCases.Category.Dto.Validators;
 using UseCases.Category.Queries.GetById;
 using UseCases.Category.Utils;
 using UseCases.Expense.Utils;
@@ -19,7 +21,8 @@ namespace Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryDtoValidator>());
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });

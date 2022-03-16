@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
+using UseCases.Exceptions;
 using UseCases.Expense.Commands.Create;
 using UseCases.Expense.Commands.Delete;
 using UseCases.Expense.Commands.Update;
@@ -25,6 +26,8 @@ namespace Server.Controllers
         [HttpGet]
         public async Task<ExpenseDto[]> GetAllAsync([FromQuery]GetAllExpensesQueryDto dto, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationFailedException();
             return await _sender.Send(new GetAllExpensesQuery { Dto = dto }, cancellationToken);
         }
 
@@ -38,6 +41,8 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ExpenseDto>> CreateAsync([FromBody]CreateExpenseDto dto, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationFailedException();
             var item = await _sender.Send(new CreateExpenseCommand { Dto = dto }, cancellationToken);
             return CreatedAtAction("Get", new { id = item.Id }, item);
         }
@@ -45,6 +50,8 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute]int id, [FromBody]UpdateExpenseDto updateItem, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationFailedException();
             return await _sender.Send(new UpdateExpenseCommand { Id = id, Dto = updateItem }, cancellationToken);
         }
 
