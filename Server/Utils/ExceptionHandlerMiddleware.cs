@@ -23,6 +23,8 @@ namespace Server.Utils
                 await _next(httpContext);
             } catch (EntityNotFoundException e) {
                 await HandleException(httpContext, HttpStatusCode.NotFound, e);
+            } catch (ValidationFailedException e) {
+                await HandleException(httpContext, HttpStatusCode.BadRequest, e);
             } catch (DbUpdateException e) {
                 await HandleException(httpContext, HttpStatusCode.Conflict, e);
             }

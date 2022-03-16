@@ -8,6 +8,7 @@ using UseCases.Category.Commands.Update;
 using UseCases.Category.Dto;
 using UseCases.Category.Queries.GetAll;
 using UseCases.Category.Queries.GetById;
+using UseCases.Exceptions;
 
 namespace Server.Controllers
 {
@@ -38,6 +39,8 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryDto>> CreateAsync([FromBody]CreateCategoryDto dto, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationFailedException();
             var item = await _sender.Send(new CreateCategoryCommand { Dto = dto }, cancellationToken);
             return CreatedAtAction("Get", new { id = item.Id }, item);
         }
@@ -45,6 +48,8 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<byte[]> UpdateAsync([FromRoute]int id, [FromBody]UpdateCategoryDto updateItem, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationFailedException();
             return await _sender.Send(new UpdateCategoryCommand { Id = id, Dto = updateItem }, cancellationToken);
         }
 
