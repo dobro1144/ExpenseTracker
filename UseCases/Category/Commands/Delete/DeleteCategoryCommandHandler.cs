@@ -7,7 +7,7 @@ using UseCases.Exceptions;
 
 namespace UseCases.Category.Commands.Delete
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
+    public class DeleteCategoryCommandHandler : AsyncRequestHandler<DeleteCategoryCommand>
     {
         readonly IDbContext _dbContext;
 
@@ -16,7 +16,7 @@ namespace UseCases.Category.Commands.Delete
             _dbContext = dbContext;
         }
 
-        public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
             var item = await _dbContext.Categories
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -24,7 +24,6 @@ namespace UseCases.Category.Commands.Delete
                 throw new EntityNotFoundException();
             _dbContext.Categories.Remove(item);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }

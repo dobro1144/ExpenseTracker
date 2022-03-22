@@ -7,7 +7,7 @@ using UseCases.Exceptions;
 
 namespace UseCases.Expense.Commands.Delete
 {
-    public class DeleteExpenseCommandHandler : IRequestHandler<DeleteExpenseCommand>
+    public class DeleteExpenseCommandHandler : AsyncRequestHandler<DeleteExpenseCommand>
     {
         readonly IDbContext _dbContext;
 
@@ -16,7 +16,7 @@ namespace UseCases.Expense.Commands.Delete
             _dbContext = dbContext;
         }
 
-        public async Task<Unit> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
         {
             var item = await _dbContext.Expenses
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -24,7 +24,6 @@ namespace UseCases.Expense.Commands.Delete
                 throw new EntityNotFoundException();
             _dbContext.Expenses.Remove(item);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }
