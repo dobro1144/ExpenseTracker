@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
+using UseCases.Category.Dto;
 
-namespace UseCases.Category.Dto.Validators
+namespace Server.Validators
 {
     public class UpdateCategoryDtoValidator : AbstractValidator<UpdateCategoryDto>
     {

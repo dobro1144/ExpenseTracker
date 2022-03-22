@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
+using UseCases.Expense.Dto;
 
-namespace UseCases.Expense.Dto.Validators
+namespace Server.Validators
 {
-    public class CreateExpenseDtoValidator : AbstractValidator<CreateExpenseDto>
+    public class UpdateExpenseDtoValidator : AbstractValidator<UpdateExpenseDto>
     {
-        public CreateExpenseDtoValidator()
+        public UpdateExpenseDtoValidator()
         {
             RuleFor(x => x.CategoryId).NotNull().GreaterThan(0);
             RuleFor(x => x.Amount).NotNull().GreaterThanOrEqualTo(0);
