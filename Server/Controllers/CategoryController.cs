@@ -23,9 +23,9 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<CategoryDto[]> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<CategoryDto[]> GetAllAsync([FromQuery] GetAllCategoriesQueryDto dto, CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetAllCategoriesQuery(), cancellationToken);
+            return await _sender.Send(new GetAllCategoriesQuery { Dto = dto }, cancellationToken);
         }
 
         [HttpGet("{id}")]
