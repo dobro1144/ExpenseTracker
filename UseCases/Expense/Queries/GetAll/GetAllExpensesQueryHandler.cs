@@ -36,7 +36,7 @@ namespace UseCases.Expense.Queries.GetAll
             if (request.Dto.ToDate.HasValue)
                 query = query.Where(x => x.CreatedAtUtc <= request.Dto.ToDate.Value);
             if (request.Dto.Comment != null)
-                query = query.Where(x => x.Comment != null && x.Comment.Contains(request.Dto.Comment, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(x => x.Comment != null && x.Comment.ToLower().Contains(request.Dto.Comment.ToLower()));
 
             return await query.ProjectTo<ExpenseDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync(cancellationToken);
