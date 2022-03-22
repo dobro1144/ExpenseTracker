@@ -13,11 +13,11 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ÑategoryController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         readonly ISender _sender;
 
-        public ÑategoryController(ISender sender)
+        public CategoryController(ISender sender)
         {
             _sender = sender;
         }
