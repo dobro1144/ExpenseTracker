@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Category.Commands.Create;
@@ -48,10 +49,11 @@ namespace Server.Controllers
             return await _sender.Send(new UpdateCategoryCommand { Id = id, Dto = updateItem }, cancellationToken);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int id, CancellationToken cancellationToken)
+        [HttpDelete("{id}/{timestamp}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromRoute] string timestamp, CancellationToken cancellationToken)
         {
-            await _sender.Send(new DeleteCategoryCommand { Id = id }, cancellationToken);
+            var timestampBytes = Convert.FromBase64String(timestamp);
+            await _sender.Send(new DeleteCategoryCommand { Id = id, Timestamp = timestampBytes }, cancellationToken);
             return NoContent();
         }
     }

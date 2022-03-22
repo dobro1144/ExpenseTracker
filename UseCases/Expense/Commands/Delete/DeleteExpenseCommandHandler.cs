@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Exceptions;
@@ -18,12 +17,14 @@ namespace UseCases.Expense.Commands.Delete
 
         protected override async Task Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Expenses
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (item == null)
-                throw new EntityNotFoundException();
+            var item = new Entities.Models.Expense {
+                Id = request.Id,
+                Timestamp = request.Timestamp
+            };
             _dbContext.Expenses.Remove(item);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
+            if (nUpdated == 0)
+                throw new EntityNotFoundException();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Exceptions;
@@ -18,12 +17,14 @@ namespace UseCases.Category.Commands.Delete
 
         protected override async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Categories
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (item == null)
-                throw new EntityNotFoundException();
+            var item = new Entities.Models.Category {
+                Id = request.Id,
+                Timestamp = request.Timestamp
+            };
             _dbContext.Categories.Remove(item);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
+            if (nUpdated == 0)
+                throw new EntityNotFoundException();
         }
     }
 }
