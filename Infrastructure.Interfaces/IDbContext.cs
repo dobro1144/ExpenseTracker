@@ -7,8 +7,8 @@ namespace Infrastructure.Interfaces
 {
     public interface IDbContext
     {
-        public DbSet<Expense> Expenses { get; }
-        public DbSet<Category> Categories { get; }
+        DbSet<Expense> Expenses { get; }
+        DbSet<Category> Categories { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

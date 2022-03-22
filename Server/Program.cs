@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.Utils;
-using UseCases.Category.Dto.Validators;
+using Server.Validators;
 using UseCases.Category.Queries.GetById;
 using UseCases.Category.Utils;
 using UseCases.Expense.Utils;

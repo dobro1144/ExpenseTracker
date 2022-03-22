@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 using System;
+using UseCases.Expense.Dto;
 
-namespace UseCases.Expense.Dto.Validators
+namespace Server.Validators
 {
     public class GetAllExpensesQueryDtoValidator : AbstractValidator<GetAllExpensesQueryDto>
     {

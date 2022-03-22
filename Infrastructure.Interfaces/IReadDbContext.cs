@@ -5,7 +5,7 @@ namespace Infrastructure.Interfaces
 {
     public interface IReadDbContext
     {
-        public IQueryable<Expense> Expenses { get; }
-        public IQueryable<Category> Categories { get; }
+        IQueryable<Expense> Expenses { get; }
+        IQueryable<Category> Categories { get; }
     }
 }
