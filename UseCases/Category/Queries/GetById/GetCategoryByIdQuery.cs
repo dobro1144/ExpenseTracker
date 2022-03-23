@@ -1,10 +1,9 @@
-﻿using MediatR;
+﻿using UseCases.Base.Queries.GetById;
 using UseCases.Category.Dto;
 
 namespace UseCases.Category.Queries.GetById
 {
-    public class GetCategoryByIdQuery : IRequest<CategoryDto>
+    public class GetCategoryByIdQuery : GetEntityByIdQuery<CategoryDto>
     {
-        public int Id { get; set; }
     }
 }

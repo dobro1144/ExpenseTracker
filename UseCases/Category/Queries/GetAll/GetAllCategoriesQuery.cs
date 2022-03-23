@@ -1,10 +1,9 @@
-﻿using MediatR;
+﻿using UseCases.Base.Queries.GetAll;
 using UseCases.Category.Dto;
 
 namespace UseCases.Category.Queries.GetAll
 {
-    public class GetAllCategoriesQuery : IRequest<CategoryDto[]>
+    public class GetAllCategoriesQuery : GetAllEntitiesQuery<GetAllCategoriesQueryDto, CategoryDto>
     {
-        public GetAllCategoriesQueryDto Dto { get; set; } = null!;
     }
 }

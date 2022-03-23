@@ -1,32 +1,14 @@
 ﻿using AutoMapper;
 using Infrastructure.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
-using UseCases.Exceptions;
+using UseCases.Base.Queries.GetById;
 using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Queries.GetById
 {
-    public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDto>
+    public class GetExpenseByIdQueryHandler : GetEntityByIdQueryHandler<GetExpenseByIdQuery, ExpenseDto, Entities.Models.Expense>
     {
-        readonly IReadDbContext _dbContext;
-        readonly IMapper _mapper;
-
-        public GetExpenseByIdQueryHandler(IReadDbContext dbContext, IMapper mapper)
+        public GetExpenseByIdQueryHandler(IReadDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
-
-        public async Task<ExpenseDto> Handle(GetExpenseByIdQuery request, CancellationToken cancellationToken)
-        {
-            var expense = await _dbContext.DbSet<Entities.Models.Expense>()
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (expense == null)
-                throw new EntityNotFoundException();
-            return _mapper.Map<ExpenseDto>(expense);
         }
     }
 }
