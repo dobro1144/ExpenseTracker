@@ -10,10 +10,10 @@ namespace UseCases.Expense.Commands.Create
 {
     public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand, ExpenseDto>
     {
-        readonly IDbContext _dbContext;
+        readonly IDbContext<Entities.Models.Expense> _dbContext;
         readonly IMapper _mapper;
 
-        public CreateExpenseCommandHandler(IDbContext dbContext, IMapper mapper)
+        public CreateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -23,7 +23,7 @@ namespace UseCases.Expense.Commands.Create
         {
             var expense = _mapper.Map<Entities.Models.Expense>(request.Dto);
             expense.CreatedAtUtc = DateTime.UtcNow;
-            _dbContext.Expenses.Add(expense);
+            _dbContext.Set.Add(expense);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return _mapper.Map<ExpenseDto>(expense);
         }

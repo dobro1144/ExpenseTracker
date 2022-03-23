@@ -10,10 +10,10 @@ namespace UseCases.Expense.Commands.Update
 {
     public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, byte[]>
     {
-        readonly IDbContext _dbContext;
+        readonly IDbContext<Entities.Models.Expense> _dbContext;
         readonly IMapper _mapper;
 
-        public UpdateExpenseCommandHandler(IDbContext dbContext, IMapper mapper)
+        public UpdateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -21,7 +21,7 @@ namespace UseCases.Expense.Commands.Update
 
         public async Task<byte[]> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Expenses
+            var item = await _dbContext.Set
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (item == null)
                 throw new EntityNotFoundException();

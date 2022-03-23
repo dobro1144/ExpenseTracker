@@ -3,9 +3,8 @@ using System.Linq;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IReadDbContext
+    public interface IReadDbContext<T> where T : Entity
     {
-        IQueryable<Expense> Expenses { get; }
-        IQueryable<Category> Categories { get; }
+        IQueryable<T> Set { get; }
     }
 }

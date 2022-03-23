@@ -13,10 +13,10 @@ namespace UseCases.Expense.Queries.GetAll
 {
     public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, ExpenseDto[]>
     {
-        readonly IReadDbContext _dbContext;
+        readonly IReadDbContext<Entities.Models.Expense> _dbContext;
         readonly IMapper _mapper;
 
-        public GetAllExpensesQueryHandler(IReadDbContext dbContext, IMapper mapper)
+        public GetAllExpensesQueryHandler(IReadDbContext<Entities.Models.Expense> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -24,7 +24,7 @@ namespace UseCases.Expense.Queries.GetAll
 
         public async Task<ExpenseDto[]> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
         {
-            var query = _dbContext.Expenses;
+            var query = _dbContext.Set;
             if (request.Dto.Categories != null)
                 query = query.Where(x => request.Dto.Categories.Contains(x.CategoryId));
             if (request.Dto.AmountMin.HasValue)

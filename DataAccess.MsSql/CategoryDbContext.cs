@@ -1,26 +1,17 @@
 ﻿using Entities.Models;
-using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace DataAccess.MsSql
 {
-    public class AppDbContext : DbContext, IDbContext, IReadDbContext
+    public class CategoryDbContext : GenericAppDbContext<Category>
     {
-        public DbSet<Expense> Expenses { get; set; } = null!;
-        public DbSet<Category> Categories { get; set; } = null!;
-
-        IQueryable<Expense> IReadDbContext.Expenses => Expenses.AsNoTracking();
-        IQueryable<Category> IReadDbContext.Categories => Categories.AsNoTracking();
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public CategoryDbContext(DbContextOptions<GenericAppDbContext<Category>> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().Property(x => x.Timestamp).IsRowVersion();
-            modelBuilder.Entity<Expense>().Property(x => x.Timestamp).IsRowVersion();
             modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Food" },

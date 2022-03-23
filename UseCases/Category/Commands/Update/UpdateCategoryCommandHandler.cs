@@ -10,10 +10,10 @@ namespace UseCases.Category.Commands.Update
 {
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, byte[]>
     {
-        readonly IDbContext _dbContext;
+        readonly IDbContext<Entities.Models.Category> _dbContext;
         readonly IMapper _mapper;
 
-        public UpdateCategoryCommandHandler(IDbContext dbContext, IMapper mapper)
+        public UpdateCategoryCommandHandler(IDbContext<Entities.Models.Category> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -21,7 +21,7 @@ namespace UseCases.Category.Commands.Update
 
         public async Task<byte[]> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var item = await _dbContext.Categories
+            var item = await _dbContext.Set
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (item == null)
                 throw new EntityNotFoundException();

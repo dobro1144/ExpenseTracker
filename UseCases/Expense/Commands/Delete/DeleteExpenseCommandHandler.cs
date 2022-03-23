@@ -8,9 +8,9 @@ namespace UseCases.Expense.Commands.Delete
 {
     public class DeleteExpenseCommandHandler : AsyncRequestHandler<DeleteExpenseCommand>
     {
-        readonly IDbContext _dbContext;
+        readonly IDbContext<Entities.Models.Expense> _dbContext;
 
-        public DeleteExpenseCommandHandler(IDbContext dbContext)
+        public DeleteExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext)
         {
             _dbContext = dbContext;
         }
@@ -21,7 +21,7 @@ namespace UseCases.Expense.Commands.Delete
                 Id = request.Id,
                 Timestamp = request.Timestamp
             };
-            _dbContext.Expenses.Remove(item);
+            _dbContext.Set.Remove(item);
             var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
             if (nUpdated == 0)
                 throw new EntityNotFoundException();

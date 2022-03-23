@@ -9,10 +9,10 @@ namespace UseCases.Category.Commands.Create
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryDto>
     {
-        readonly IDbContext _dbContext;
+        readonly IDbContext<Entities.Models.Category> _dbContext;
         readonly IMapper _mapper;
 
-        public CreateCategoryCommandHandler(IDbContext dbContext, IMapper mapper)
+        public CreateCategoryCommandHandler(IDbContext<Entities.Models.Category> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -21,7 +21,7 @@ namespace UseCases.Category.Commands.Create
         public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Entities.Models.Category>(request.Dto);
-            _dbContext.Categories.Add(category);
+            _dbContext.Set.Add(category);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return _mapper.Map<CategoryDto>(category);
         }

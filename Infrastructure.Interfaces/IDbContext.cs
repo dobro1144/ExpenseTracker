@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IDbContext
+    public interface IDbContext<T>
+        where T : Entity
     {
-        DbSet<Expense> Expenses { get; }
-        DbSet<Category> Categories { get; }
+        DbSet<T> Set { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
