@@ -1,33 +1,14 @@
 ﻿using AutoMapper;
 using Infrastructure.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
-using UseCases.Exceptions;
+using UseCases.Base.Commands.Update;
+using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Commands.Update
 {
-    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, byte[]>
+    public class UpdateExpenseCommandHandler : UpdateEntityCommandHandler<UpdateExpenseCommand, UpdateExpenseDto, Entities.Models.Expense>
     {
-        readonly IDbContext<Entities.Models.Expense> _dbContext;
-        readonly IMapper _mapper;
-
-        public UpdateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper)
+        public UpdateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper) : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
-
-        public async Task<byte[]> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
-        {
-            var item = await _dbContext.Set
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (item == null)
-                throw new EntityNotFoundException();
-            _mapper.Map(request.Dto, item);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            return item.Timestamp;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Expense.Commands.Create;
@@ -52,8 +51,7 @@ namespace Server.Controllers
         [HttpDelete("{id}/{timestamp}")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromRoute]string timestamp, CancellationToken cancellationToken)
         {
-            var timestampBytes = Convert.FromBase64String(timestamp);
-            await _sender.Send(new DeleteExpenseCommand { Id = id, Timestamp = timestampBytes }, cancellationToken);
+            await _sender.Send(new DeleteExpenseCommand { Id = id, Timestamp = timestamp }, cancellationToken);
             return NoContent();
         }
     }
