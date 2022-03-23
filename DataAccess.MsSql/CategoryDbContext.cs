@@ -5,7 +5,7 @@ namespace DataAccess.MsSql
 {
     public class CategoryDbContext : GenericAppDbContext<Category>
     {
-        public CategoryDbContext(DbContextOptions<GenericAppDbContext<Category>> options) : base(options)
+        public CategoryDbContext(DbContextOptions<CategoryDbContext> options) : base(options)
         {
         }
 

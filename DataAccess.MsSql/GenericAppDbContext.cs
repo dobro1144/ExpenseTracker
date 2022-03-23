@@ -12,7 +12,7 @@ namespace DataAccess.MsSql
 
         IQueryable<T> IReadDbContext<T>.Set => Set.AsNoTracking();
 
-        public GenericAppDbContext(DbContextOptions<GenericAppDbContext<T>> options) : base(options)
+        public GenericAppDbContext(DbContextOptions options) : base(options)
         {
         }
     }

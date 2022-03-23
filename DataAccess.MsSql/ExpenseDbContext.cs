@@ -5,7 +5,7 @@ namespace DataAccess.MsSql
 {
     public class ExpenseDbContext : GenericAppDbContext<Expense>
     {
-        public ExpenseDbContext(DbContextOptions<GenericAppDbContext<Expense>> options) : base(options)
+        public ExpenseDbContext(DbContextOptions<ExpenseDbContext> options) : base(options)
         {
         }
 
