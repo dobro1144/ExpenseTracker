@@ -1,34 +1,22 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Infrastructure.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using UseCases.Base.Queries.GetAll;
 using UseCases.Category.Dto;
 
 namespace UseCases.Category.Queries.GetAll
 {
-    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, CategoryDto[]>
+    public class GetAllCategoriesQueryHandler : GetAllEntitiesQueryHandler<GetAllCategoriesQuery, GetAllCategoriesQueryDto, CategoryDto, Entities.Models.Category>
     {
-        readonly IReadDbContext _dbContext;
-        readonly IMapper _mapper;
-
-        public GetAllCategoriesQueryHandler(IReadDbContext dbContext, IMapper mapper)
+        public GetAllCategoriesQueryHandler(IReadDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
         }
 
-        public async Task<CategoryDto[]> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        protected override IQueryable<Entities.Models.Category> DecorateQuery(GetAllCategoriesQuery request, IQueryable<Entities.Models.Category> incomingQuery)
         {
-            var query = _dbContext.Categories;
             if (request.Dto.Name != null)
-                query = query.Where(x => x.Name.ToLower().Contains(request.Dto.Name.ToLower()));
-
-            return await query.ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync(cancellationToken);
+                incomingQuery = incomingQuery.Where(x => x.Name.ToLower().Contains(request.Dto.Name.ToLower()));
+            return incomingQuery;
         }
     }
 }

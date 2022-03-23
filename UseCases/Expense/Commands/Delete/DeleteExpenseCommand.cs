@@ -1,10 +1,8 @@
-﻿using MediatR;
+﻿using UseCases.Base.Commands.Delete;
 
 namespace UseCases.Expense.Commands.Delete
 {
-    public class DeleteExpenseCommand : IRequest
+    public class DeleteExpenseCommand : DeleteEntityCommand
     {
-        public int Id { get; set; }
-        public byte[] Timestamp { get; set; } = null!;
     }
 }

@@ -1,30 +1,20 @@
 ﻿using Infrastructure.Interfaces;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-using UseCases.Exceptions;
+using UseCases.Base.Commands.Delete;
 
 namespace UseCases.Category.Commands.Delete
 {
-    public class DeleteCategoryCommandHandler : AsyncRequestHandler<DeleteCategoryCommand>
+    public class DeleteCategoryCommandHandler : DeleteEntityCommandHandler<DeleteCategoryCommand, Entities.Models.Category>
     {
-        readonly IDbContext _dbContext;
-
-        public DeleteCategoryCommandHandler(IDbContext dbContext)
+        public DeleteCategoryCommandHandler(IDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
-        protected override async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        protected override Entities.Models.Category CreateEntity(int id, byte[] timestamp)
         {
-            var item = new Entities.Models.Category {
-                Id = request.Id,
-                Timestamp = request.Timestamp
+            return new Entities.Models.Category {
+                Id = id,
+                Timestamp = timestamp
             };
-            _dbContext.Categories.Remove(item);
-            var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
-            if (nUpdated == 0)
-                throw new EntityNotFoundException();
         }
     }
 }

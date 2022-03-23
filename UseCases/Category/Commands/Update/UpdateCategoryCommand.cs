@@ -1,11 +1,9 @@
-﻿using MediatR;
+﻿using UseCases.Base.Commands.Update;
 using UseCases.Category.Dto;
 
 namespace UseCases.Category.Commands.Update
 {
-    public class UpdateCategoryCommand : IRequest<byte[]>
+    public class UpdateCategoryCommand : UpdateEntityCommand<UpdateCategoryDto>
     {
-        public int Id { get; set; }
-        public UpdateCategoryDto Dto { get; set; } = null!;
     }
 }

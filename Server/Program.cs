@@ -27,10 +27,9 @@ namespace Server
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });
             builder.Services.AddMediatR(typeof(GetCategoryByIdQuery));
-            builder.Services.AddDbContext<IDbContext, AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["MsSql"]));
-            builder.Services.AddDbContext<IReadDbContext, AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["MsSql"]));
+            var connectionString = builder.Configuration.GetSection("ConnectionStrings")["MsSql"];
+            builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<IReadDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();

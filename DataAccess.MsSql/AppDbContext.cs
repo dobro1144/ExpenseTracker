@@ -10,8 +10,8 @@ namespace DataAccess.MsSql
         public DbSet<Expense> Expenses { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
 
-        IQueryable<Expense> IReadDbContext.Expenses => Expenses.AsNoTracking();
-        IQueryable<Category> IReadDbContext.Categories => Categories.AsNoTracking();
+        public DbSet<T> DbSet<T>() where T : Entity => base.Set<T>();
+        IQueryable<T> IReadDbContext.DbSet<T>() => base.Set<T>().AsNoTracking();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

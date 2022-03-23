@@ -1,30 +1,20 @@
 ﻿using Infrastructure.Interfaces;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-using UseCases.Exceptions;
+using UseCases.Base.Commands.Delete;
 
 namespace UseCases.Expense.Commands.Delete
 {
-    public class DeleteExpenseCommandHandler : AsyncRequestHandler<DeleteExpenseCommand>
+    public class DeleteExpenseCommandHandler : DeleteEntityCommandHandler<DeleteExpenseCommand, Entities.Models.Expense>
     {
-        readonly IDbContext _dbContext;
-
-        public DeleteExpenseCommandHandler(IDbContext dbContext)
+        public DeleteExpenseCommandHandler(IDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
-        protected override async Task Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
+        protected override Entities.Models.Expense CreateEntity(int id, byte[] timestamp)
         {
-            var item = new Entities.Models.Expense {
-                Id = request.Id,
-                Timestamp = request.Timestamp
+            return new Entities.Models.Expense {
+                Id = id,
+                Timestamp = timestamp
             };
-            _dbContext.Expenses.Remove(item);
-            var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
-            if (nUpdated == 0)
-                throw new EntityNotFoundException();
         }
     }
 }

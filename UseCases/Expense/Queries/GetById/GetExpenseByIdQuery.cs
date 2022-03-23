@@ -1,10 +1,9 @@
-﻿using MediatR;
+﻿using UseCases.Base.Queries.GetById;
 using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Queries.GetById
 {
-    public class GetExpenseByIdQuery : IRequest<ExpenseDto>
+    public class GetExpenseByIdQuery : GetEntityByIdQuery<ExpenseDto>
     {
-        public int Id { get; set; }
     }
 }

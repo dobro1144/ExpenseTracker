@@ -1,10 +1,9 @@
-﻿using MediatR;
+﻿using UseCases.Base.Queries.GetAll;
 using UseCases.Expense.Dto;
 
 namespace UseCases.Expense.Queries.GetAll
 {
-    public class GetAllExpensesQuery : IRequest<ExpenseDto[]>
+    public class GetAllExpensesQuery : GetAllEntitiesQuery<GetAllExpensesQueryDto, ExpenseDto>
     {
-        public GetAllExpensesQueryDto Dto { get; set; } = null!;
     }
 }
