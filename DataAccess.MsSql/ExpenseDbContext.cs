@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.MsSql
 {
-    public class ExpenseDbContext : GenericAppDbContext<Expense>
+    public class ExpenseDbContext : BaseDbContext<Expense>
     {
         public ExpenseDbContext(DbContextOptions<ExpenseDbContext> options) : base(options)
         {

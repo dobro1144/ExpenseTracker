@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.MsSql
 {
-    public class CategoryDbContext : GenericAppDbContext<Category>
+    public class CategoryDbContext : BaseDbContext<Category>
     {
         public CategoryDbContext(DbContextOptions<CategoryDbContext> options) : base(options)
         {
