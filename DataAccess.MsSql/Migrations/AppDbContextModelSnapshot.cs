@@ -4,22 +4,20 @@ using DataAccess.MsSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DataAccess.MsSql.Migrations.Expense
+namespace DataAccess.MsSql.Migrations
 {
-    [DbContext(typeof(ExpenseDbContext))]
-    [Migration("20220323082029_Initial")]
-    partial class Initial
+    [DbContext(typeof(AppDbContext))]
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -34,15 +32,47 @@ namespace DataAccess.MsSql.Migrations.Expense
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Food"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Transport"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Phone"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Internet"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Entertainment"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Expense", b =>
@@ -75,7 +105,7 @@ namespace DataAccess.MsSql.Migrations.Expense
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Set");
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("Entities.Models.Expense", b =>

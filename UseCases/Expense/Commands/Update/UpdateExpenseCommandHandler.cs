@@ -7,7 +7,7 @@ namespace UseCases.Expense.Commands.Update
 {
     public class UpdateExpenseCommandHandler : UpdateEntityCommandHandler<UpdateExpenseCommand, UpdateExpenseDto, Entities.Models.Expense>
     {
-        public UpdateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper) : base(dbContext, mapper)
+        public UpdateExpenseCommandHandler(IDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
         }
     }

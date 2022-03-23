@@ -12,9 +12,9 @@ namespace UseCases.Base.Commands.Delete
         where TCommand : DeleteEntityCommand
         where TEntity : Entity
     {
-        readonly IDbContext<TEntity> _dbContext;
+        readonly IDbContext _dbContext;
 
-        public DeleteEntityCommandHandler(IDbContext<TEntity> dbContext)
+        public DeleteEntityCommandHandler(IDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -24,7 +24,7 @@ namespace UseCases.Base.Commands.Delete
             var timestampBytes = Convert.FromBase64String(request.Timestamp);
             var entity = CreateEntity(request.Id, timestampBytes);
 
-            _dbContext.Set.Remove(entity);
+            _dbContext.DbSet<TEntity>().Remove(entity);
             var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
             if (nUpdated == 0)
                 throw new EntityNotFoundException();

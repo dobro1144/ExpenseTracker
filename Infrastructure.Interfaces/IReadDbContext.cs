@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IReadDbContext<T> where T : Entity
+    public interface IReadDbContext
     {
-        IQueryable<T> Set { get; }
+        IQueryable<T> DbSet<T>() where T : Entity;
     }
 }

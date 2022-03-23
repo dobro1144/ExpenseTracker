@@ -11,10 +11,10 @@ namespace UseCases.Expense.Queries.GetById
 {
     public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDto>
     {
-        readonly IReadDbContext<Entities.Models.Expense> _dbContext;
+        readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetExpenseByIdQueryHandler(IReadDbContext<Entities.Models.Expense> dbContext, IMapper mapper)
+        public GetExpenseByIdQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -22,7 +22,7 @@ namespace UseCases.Expense.Queries.GetById
 
         public async Task<ExpenseDto> Handle(GetExpenseByIdQuery request, CancellationToken cancellationToken)
         {
-            var expense = await _dbContext.Set
+            var expense = await _dbContext.DbSet<Entities.Models.Expense>()
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (expense == null)
                 throw new EntityNotFoundException();

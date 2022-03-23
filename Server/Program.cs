@@ -1,5 +1,4 @@
 using DataAccess.MsSql;
-using Entities.Models;
 using FluentValidation.AspNetCore;
 using Infrastructure.Interfaces;
 using MediatR;
@@ -29,10 +28,8 @@ namespace Server
             builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });
             builder.Services.AddMediatR(typeof(GetCategoryByIdQuery));
             var connectionString = builder.Configuration.GetSection("ConnectionStrings")["MsSql"];
-            builder.Services.AddDbContext<IDbContext<Category>, CategoryDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDbContext<IReadDbContext<Category>, CategoryDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDbContext<IDbContext<Expense>, ExpenseDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDbContext<IReadDbContext<Expense>, ExpenseDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<IReadDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();

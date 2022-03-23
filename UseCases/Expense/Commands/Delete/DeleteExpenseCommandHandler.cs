@@ -5,7 +5,7 @@ namespace UseCases.Expense.Commands.Delete
 {
     public class DeleteExpenseCommandHandler : DeleteEntityCommandHandler<DeleteExpenseCommand, Entities.Models.Expense>
     {
-        public DeleteExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext) : base(dbContext)
+        public DeleteExpenseCommandHandler(IDbContext dbContext) : base(dbContext)
         {
         }
 

@@ -8,7 +8,7 @@ namespace UseCases.Expense.Commands.Create
 {
     public class CreateExpenseCommandHandler : CreateEntityCommandHandler<CreateExpenseCommand, CreateExpenseDto, ExpenseDto, Entities.Models.Expense>
     {
-        public CreateExpenseCommandHandler(IDbContext<Entities.Models.Expense> dbContext, IMapper mapper) : base(dbContext, mapper)
+        public CreateExpenseCommandHandler(IDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
         }
 

@@ -7,7 +7,7 @@ namespace UseCases.Category.Commands.Create
 {
     public class CreateCategoryCommandHandler : CreateEntityCommandHandler<CreateCategoryCommand, CreateCategoryDto, CategoryDto, Entities.Models.Category>
     {
-        public CreateCategoryCommandHandler(IDbContext<Entities.Models.Category> dbContext, IMapper mapper) : base(dbContext, mapper)
+        public CreateCategoryCommandHandler(IDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
         }
     }

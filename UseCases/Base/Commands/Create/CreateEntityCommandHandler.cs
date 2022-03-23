@@ -13,10 +13,10 @@ namespace UseCases.Base.Commands.Create
         where TRequestDto : class
         where TResponseDto : class
     {
-        readonly IDbContext<TEntity> _dbContext;
+        readonly IDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public CreateEntityCommandHandler(IDbContext<TEntity> dbContext, IMapper mapper)
+        public CreateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -27,7 +27,7 @@ namespace UseCases.Base.Commands.Create
             var entity = _mapper.Map<TEntity>(request.Dto);
             InitializeNewEntity(entity);
 
-            _dbContext.Set.Add(entity);
+            _dbContext.DbSet<TEntity>().Add(entity);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TResponseDto>(entity);
         }

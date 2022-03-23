@@ -7,7 +7,7 @@ namespace UseCases.Category.Commands.Update
 {
     public class UpdateCategoryCommandHandler : UpdateEntityCommandHandler<UpdateCategoryCommand, UpdateCategoryDto, Entities.Models.Category>
     {
-        public UpdateCategoryCommandHandler(IDbContext<Entities.Models.Category> dbContext, IMapper mapper) : base(dbContext, mapper)
+        public UpdateCategoryCommandHandler(IDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
         }
     }

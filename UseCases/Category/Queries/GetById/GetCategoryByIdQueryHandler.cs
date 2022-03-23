@@ -11,10 +11,10 @@ namespace UseCases.Category.Queries.GetById
 {
     public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto>
     {
-        readonly IReadDbContext<Entities.Models.Category> _dbContext;
+        readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetCategoryByIdQueryHandler(IReadDbContext<Entities.Models.Category> dbContext, IMapper mapper)
+        public GetCategoryByIdQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -22,7 +22,7 @@ namespace UseCases.Category.Queries.GetById
 
         public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var category =  await _dbContext.Set
+            var category =  await _dbContext.DbSet<Entities.Models.Category>()
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (category == null)
                 throw new EntityNotFoundException();

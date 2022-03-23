@@ -14,10 +14,10 @@ namespace UseCases.Base.Commands.Update
         where TRequestDto : class
         where TEntity : Entity
     {
-        readonly IDbContext<TEntity> _dbContext;
+        readonly IDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public UpdateEntityCommandHandler(IDbContext<TEntity> dbContext, IMapper mapper)
+        public UpdateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -25,7 +25,7 @@ namespace UseCases.Base.Commands.Update
 
         public async Task<byte[]> Handle(TCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Set
+            var entity = await _dbContext.DbSet<TEntity>()
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (entity == null)
                 throw new EntityNotFoundException();
