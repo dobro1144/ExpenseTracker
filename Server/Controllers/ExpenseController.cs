@@ -23,9 +23,10 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ExpenseDto[]> GetAllAsync([FromQuery]GetAllExpensesQueryDto dto, CancellationToken cancellationToken)
+        public async Task<ActionResult<ExpenseDto[]>> GetAllAsync([FromQuery]GetAllExpensesQueryDto dto, CancellationToken cancellationToken)
         {
-            return await _sender.Send(new GetAllExpensesQuery { Dto = dto }, cancellationToken);
+            var items = await _sender.Send(new GetAllExpensesQuery { Dto = dto }, cancellationToken);
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
@@ -45,7 +46,8 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute]int id, [FromBody]UpdateExpenseDto updateItem, CancellationToken cancellationToken)
         {
-            return await _sender.Send(new UpdateExpenseCommand { Id = id, Dto = updateItem }, cancellationToken);
+            var timestamp = await _sender.Send(new UpdateExpenseCommand { Id = id, Dto = updateItem }, cancellationToken);
+            return Ok(timestamp);
         }
 
         [HttpDelete("{id}/{timestamp}")]
