@@ -17,7 +17,7 @@ namespace UseCases.Base.Queries.GetById
         readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetEntityByIdQueryHandler(IReadDbContext dbContext, IMapper mapper)
+        protected GetEntityByIdQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;

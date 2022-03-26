@@ -19,7 +19,7 @@ namespace UseCases.Base.Queries.GetAll
         readonly IReadDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public GetAllEntitiesQueryHandler(IReadDbContext dbContext, IMapper mapper)
+        protected GetAllEntitiesQueryHandler(IReadDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
