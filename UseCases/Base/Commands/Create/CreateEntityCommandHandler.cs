@@ -16,7 +16,7 @@ namespace UseCases.Base.Commands.Create
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public CreateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
+        protected CreateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;

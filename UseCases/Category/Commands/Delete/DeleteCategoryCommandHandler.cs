@@ -8,13 +8,5 @@ namespace UseCases.Category.Commands.Delete
         public DeleteCategoryCommandHandler(IDbContext dbContext) : base(dbContext)
         {
         }
-
-        protected override Entities.Models.Category CreateEntity(int id, byte[] timestamp)
-        {
-            return new Entities.Models.Category {
-                Id = id,
-                Timestamp = timestamp
-            };
-        }
     }
 }

@@ -17,7 +17,7 @@ namespace UseCases.Base.Commands.Update
         readonly IDbContext _dbContext;
         readonly IMapper _mapper;
 
-        public UpdateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
+        protected UpdateEntityCommandHandler(IDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
