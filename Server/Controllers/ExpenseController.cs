@@ -50,8 +50,8 @@ namespace Server.Controllers
             return Ok(timestamp);
         }
 
-        [HttpDelete("{id}/{timestamp}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromRoute]string timestamp, CancellationToken cancellationToken)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromBody]string timestamp, CancellationToken cancellationToken)
         {
             await _sender.Send(new DeleteExpenseCommand { Id = id, Timestamp = timestamp }, cancellationToken);
             return NoContent();

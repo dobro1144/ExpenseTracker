@@ -21,9 +21,14 @@ namespace UseCases.Base.Commands.Delete
 
         protected override async Task Handle(TCommand request, CancellationToken cancellationToken)
         {
-            var timestampBytes = Convert.FromBase64String(request.Timestamp);
-            var entity = new TEntity { Id = request.Id, Timestamp = timestampBytes };
+            byte[] timestampBytes;
+            try {
+                timestampBytes = Convert.FromBase64String(request.Timestamp);
+            } catch (FormatException) {
+                throw new TimestampFormatException();
+            }
 
+            var entity = new TEntity { Id = request.Id, Timestamp = timestampBytes };
             _dbContext.DbSet<TEntity>().Remove(entity);
             var nUpdated = await _dbContext.SaveChangesAsync(cancellationToken);
             if (nUpdated == 0)

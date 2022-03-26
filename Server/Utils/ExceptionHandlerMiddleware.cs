@@ -25,6 +25,8 @@ namespace Server.Utils
                 await HandleException(httpContext, HttpStatusCode.NotFound, e);
             } catch (DbUpdateException e) {
                 await HandleException(httpContext, HttpStatusCode.Conflict, e);
+            } catch (TimestampFormatException e) {
+                await HandleException(httpContext, HttpStatusCode.UnprocessableEntity, e);
             }
         }
 
