@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using UseCases.User.Dto;
 
-namespace Server.Validators
+namespace Server.Validators.User
 {
     public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
     {

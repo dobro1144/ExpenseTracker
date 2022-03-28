@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using UseCases.Category.Dto;
+using UseCases.Account.Dto;
 
-namespace Server.Validators
+namespace Server.Validators.Account
 {
-    public class GetAllCategoriesQueryDtoValidator : AbstractValidator<GetAllCategoriesQueryDto>
+    public class GetAllAccountsQueryDtoValidator : AbstractValidator<GetAllAccountsQueryDto>
     {
-        public GetAllCategoriesQueryDtoValidator()
+        public GetAllAccountsQueryDtoValidator()
         {
             RuleForEach(x => x.Users).NotNull().GreaterThan(0).When(x => x.Users != null);
             RuleFor(x => x.Name).MaximumLength(450).When(x => x.Name != null);

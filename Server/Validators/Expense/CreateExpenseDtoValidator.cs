@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using UseCases.Expense.Dto;
 
-namespace Server.Validators
+namespace Server.Validators.Expense
 {
     public class CreateExpenseDtoValidator : AbstractValidator<CreateExpenseDto>
     {
