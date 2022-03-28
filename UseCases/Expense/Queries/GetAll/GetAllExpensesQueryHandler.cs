@@ -18,7 +18,7 @@ namespace UseCases.Expense.Queries.GetAll
             if (request.Dto.Accounts != null)
                 query = query.Where(x => request.Dto.Accounts.Contains(x.AccountId));
             if (request.Dto.Categories != null)
-                query = query.Where(x => request.Dto.Categories.Contains(x.CategoryId));
+                query = query.Where(x => x.CategoryId.HasValue && request.Dto.Categories.Contains(x.CategoryId.Value));
             if (request.Dto.AmountMin.HasValue)
                 query = query.Where(x => x.Amount >= request.Dto.AmountMin.Value);
             if (request.Dto.AmountMax.HasValue)
