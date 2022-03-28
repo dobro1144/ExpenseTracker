@@ -10,7 +10,6 @@ using Server.Utils;
 using Server.Validators;
 using UseCases.Category.Queries.GetById;
 using UseCases.Category.Utils;
-using UseCases.Expense.Utils;
 
 namespace Server
 {
@@ -25,7 +24,7 @@ namespace Server
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCategoryDtoValidator>());
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddAutoMapper(new[] { typeof(CategoryMapperProfile), typeof(ExpenseMapperProfile) });
+            builder.Services.AddAutoMapper(typeof(CategoryMapperProfile));
             builder.Services.AddMediatR(typeof(GetCategoryByIdQuery));
             var connectionString = builder.Configuration.GetSection("ConnectionStrings")["MsSql"];
             builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
