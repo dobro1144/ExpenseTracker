@@ -4,6 +4,7 @@ namespace UseCases.Expense.Dto
 {
     public class GetAllExpensesQueryDto
     {
+        public int[]? Accounts { get; set; }
         public int[]? Categories { get; set; }
         public double? AmountMin { get; set; }
         public double? AmountMax { get; set; }

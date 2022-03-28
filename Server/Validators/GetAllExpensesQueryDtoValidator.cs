@@ -8,6 +8,7 @@ namespace Server.Validators
     {
         public GetAllExpensesQueryDtoValidator()
         {
+            RuleForEach(x => x.Accounts).NotNull().GreaterThan(0).When(x => x.Accounts != null);
             RuleForEach(x => x.Categories).NotNull().GreaterThan(0).When(x => x.Categories != null);
             RuleFor(x => x.AmountMin).GreaterThanOrEqualTo(0).When(x => x.AmountMin.HasValue);
             RuleFor(x => x.AmountMax).GreaterThanOrEqualTo(0).When(x => x.AmountMax.HasValue);

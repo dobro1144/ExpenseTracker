@@ -7,6 +7,7 @@ namespace Server.Validators
     {
         public CreateExpenseDtoValidator()
         {
+            RuleFor(x => x.AccountId).NotNull().GreaterThan(0);
             RuleFor(x => x.CategoryId).NotNull().GreaterThan(0);
             RuleFor(x => x.Amount).NotNull().GreaterThanOrEqualTo(0);
             RuleFor(x => x.Comment).MaximumLength(450).When(x => x.Comment != null);
