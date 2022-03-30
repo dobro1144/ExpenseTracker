@@ -13,21 +13,22 @@ namespace UseCases.Expense.Queries.GetAll
         {
         }
 
-        protected override IQueryable<Entities.Models.Expense> DecorateQuery(GetAllExpensesQuery request, IQueryable<Entities.Models.Expense> incomingQuery)
+        protected override void DecorateQuery(ref IQueryable<Entities.Models.Expense> query, GetAllExpensesQuery request)
         {
+            if (request.Dto.Accounts != null)
+                query = query.Where(x => request.Dto.Accounts.Contains(x.AccountId));
             if (request.Dto.Categories != null)
-                incomingQuery = incomingQuery.Where(x => request.Dto.Categories.Contains(x.CategoryId));
+                query = query.Where(x => x.CategoryId.HasValue && request.Dto.Categories.Contains(x.CategoryId.Value));
             if (request.Dto.AmountMin.HasValue)
-                incomingQuery = incomingQuery.Where(x => x.Amount >= request.Dto.AmountMin.Value);
+                query = query.Where(x => x.Amount >= request.Dto.AmountMin.Value);
             if (request.Dto.AmountMax.HasValue)
-                incomingQuery = incomingQuery.Where(x => x.Amount <= request.Dto.AmountMax.Value);
+                query = query.Where(x => x.Amount <= request.Dto.AmountMax.Value);
             if (request.Dto.FromDate.HasValue)
-                incomingQuery = incomingQuery.Where(x => x.CreatedAtUtc >= request.Dto.FromDate.Value);
+                query = query.Where(x => x.CreatedAtUtc >= request.Dto.FromDate.Value);
             if (request.Dto.ToDate.HasValue)
-                incomingQuery = incomingQuery.Where(x => x.CreatedAtUtc <= request.Dto.ToDate.Value);
+                query = query.Where(x => x.CreatedAtUtc <= request.Dto.ToDate.Value);
             if (request.Dto.Comment != null)
-                incomingQuery = incomingQuery.Where(x => x.Comment != null && x.Comment.ToLower().Contains(request.Dto.Comment.ToLower()));
-            return incomingQuery;
+                query = query.Where(x => x.Comment != null && x.Comment.ToLower().Contains(request.Dto.Comment.ToLower()));
         }
     }
 }

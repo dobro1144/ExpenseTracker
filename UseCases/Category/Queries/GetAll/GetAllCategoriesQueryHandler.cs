@@ -12,11 +12,12 @@ namespace UseCases.Category.Queries.GetAll
         {
         }
 
-        protected override IQueryable<Entities.Models.Category> DecorateQuery(GetAllCategoriesQuery request, IQueryable<Entities.Models.Category> incomingQuery)
+        protected override void DecorateQuery(ref IQueryable<Entities.Models.Category> query, GetAllCategoriesQuery request)
         {
+            if (request.Dto.Users != null)
+                query = query.Where(x => request.Dto.Users.Contains(x.UserId));
             if (request.Dto.Name != null)
-                incomingQuery = incomingQuery.Where(x => x.Name.ToLower().Contains(request.Dto.Name.ToLower()));
-            return incomingQuery;
+                query = query.Where(x => x.Name.ToLower().Contains(request.Dto.Name.ToLower()));
         }
     }
 }

@@ -28,15 +28,14 @@ namespace UseCases.Base.Queries.GetAll
         public async Task<TResponseDto[]> Handle(TCommand request, CancellationToken cancellationToken)
         {
             var query = _dbContext.DbSet<TEntity>();
-            query = DecorateQuery(request, query);
+            DecorateQuery(ref query, request);
 
             return await query.ProjectTo<TResponseDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync(cancellationToken);
         }
 
-        protected virtual IQueryable<TEntity> DecorateQuery(TCommand request, IQueryable<TEntity> incomingQuery)
+        protected virtual void DecorateQuery(ref IQueryable<TEntity> query, TCommand request)
         {
-            return incomingQuery;
         }
     }
 }

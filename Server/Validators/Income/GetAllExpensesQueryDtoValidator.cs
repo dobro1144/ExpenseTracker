@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using System;
-using UseCases.Expense.Dto;
+using UseCases.Income.Dto;
 
-namespace Server.Validators
+namespace Server.Validators.Income
 {
-    public class GetAllExpensesQueryDtoValidator : AbstractValidator<GetAllExpensesQueryDto>
+    public class GetAllIncomesQueryDtoValidator : AbstractValidator<GetAllIncomesQueryDto>
     {
-        public GetAllExpensesQueryDtoValidator()
+        public GetAllIncomesQueryDtoValidator()
         {
-            RuleForEach(x => x.Categories).NotNull().GreaterThan(0).When(x => x.Categories != null);
+            RuleForEach(x => x.Accounts).NotNull().GreaterThan(0).When(x => x.Accounts != null);
             RuleFor(x => x.AmountMin).GreaterThanOrEqualTo(0).When(x => x.AmountMin.HasValue);
             RuleFor(x => x.AmountMax).GreaterThanOrEqualTo(0).When(x => x.AmountMax.HasValue);
             RuleFor(x => x.AmountMin)
