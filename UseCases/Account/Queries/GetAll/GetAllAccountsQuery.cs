@@ -1,9 +1,9 @@
-﻿using UseCases.Base.Queries.GetAll;
-using UseCases.Account.Dto;
+﻿using UseCases.Account.Dto;
+using MediatR;
 
 namespace UseCases.Account.Queries.GetAll
 {
-    public class GetAllAccountsQuery : GetAllEntitiesQuery<GetAllAccountsQueryDto, AccountDto>
+    public class GetAllAccountsQuery : IRequest<AccountBalanceDto[]>
     {
     }
 }
