@@ -1,5 +1,5 @@
 ﻿using Entities.Models;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using MediatR;
 using System;
 using System.Threading;

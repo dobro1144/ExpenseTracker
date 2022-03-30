@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using UseCases.Base.Commands.Update;
 using UseCases.Category.Dto;
 

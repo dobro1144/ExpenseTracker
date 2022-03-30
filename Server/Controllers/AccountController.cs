@@ -23,9 +23,9 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<AccountDto[]>> GetAllAsync([FromQuery] GetAllAccountsQueryDto dto, CancellationToken cancellationToken)
+        public async Task<ActionResult<AccountBalanceDto[]>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var items = await _sender.Send(new GetAllAccountsQuery { Dto = dto }, cancellationToken);
+            var items = await _sender.Send(new GetAllAccountsQuery(), cancellationToken);
             return Ok(items);
         }
 

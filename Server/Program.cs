@@ -1,11 +1,13 @@
 using DataAccess.MsSql;
 using FluentValidation.AspNetCore;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
+using Infrastructure.Interfaces.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Server.Services;
 using Server.Utils;
 using Server.Validators.Category;
 using UseCases.Category.Queries.GetById;
@@ -30,6 +32,7 @@ namespace Server
             builder.Services.AddDbContext<IDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDbContext<IReadDbContext, AppDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             var app = builder.Build();
 

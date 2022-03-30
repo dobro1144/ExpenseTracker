@@ -1,4 +1,4 @@
-﻿using Infrastructure.Interfaces;
+﻿using Infrastructure.Interfaces.DataAccess;
 using UseCases.Base.Commands.Delete;
 
 namespace UseCases.Category.Commands.Delete

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
 using UseCases.Base.Commands.Update;
 using UseCases.Account.Dto;
+using Infrastructure.Interfaces.DataAccess;
 
 namespace UseCases.Account.Commands.Update
 {

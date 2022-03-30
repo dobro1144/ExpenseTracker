@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using System;
 using System.Linq;
 using UseCases.Base.Queries.GetAll;

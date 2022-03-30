@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using System;
 using UseCases.Base.Commands.Create;
 using UseCases.Expense.Dto;
