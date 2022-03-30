@@ -7,7 +7,7 @@ namespace Server.Validators.User
     {
         public GetAllUsersQueryDtoValidator()
         {
-            RuleFor(x => x.Name).EmailAddress().MaximumLength(450).When(x => x.Name != null);
+            RuleFor(x => x.Email).EmailAddress().MaximumLength(450).When(x => x.Name != null);
             RuleFor(x => x.Name).MaximumLength(450).When(x => x.Name != null);
         }
     }
