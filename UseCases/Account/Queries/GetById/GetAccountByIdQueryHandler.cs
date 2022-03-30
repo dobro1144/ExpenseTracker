@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
 using UseCases.Base.Queries.GetById;
 using UseCases.Account.Dto;
+using Infrastructure.Interfaces.DataAccess;
 
 namespace UseCases.Account.Queries.GetById
 {

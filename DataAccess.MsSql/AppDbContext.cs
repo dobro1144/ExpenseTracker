@@ -1,5 +1,5 @@
 ﻿using Entities.Models;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 

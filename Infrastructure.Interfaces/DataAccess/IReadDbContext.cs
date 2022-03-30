@@ -1,7 +1,7 @@
 ﻿using Entities.Models;
 using System.Linq;
 
-namespace Infrastructure.Interfaces
+namespace Infrastructure.Interfaces.DataAccess
 {
     public interface IReadDbContext
     {

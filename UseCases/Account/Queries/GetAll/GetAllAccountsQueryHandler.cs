@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
 using System.Linq;
 using UseCases.Base.Queries.GetAll;
 using UseCases.Account.Dto;
+using Infrastructure.Interfaces.DataAccess;
 
 namespace UseCases.Account.Queries.GetAll
 {

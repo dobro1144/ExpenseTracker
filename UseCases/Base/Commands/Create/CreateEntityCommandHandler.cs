@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Entities.Models;
-using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.DataAccess;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
