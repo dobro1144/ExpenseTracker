@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Server.Services;
 using Server.Utils;
 using Server.Validators.Category;
+using System;
+using System.IO;
 using UseCases.Category.Queries.GetById;
 using UseCases.Category.Utils;
 
@@ -19,7 +22,17 @@ namespace Server
     {
         static void Main(string[] args)
         {
+            Environment.SetEnvironmentVariable("LOGDIR", Path.Combine(AppContext.BaseDirectory, "Logs"));
+
             var builder = WebApplication.CreateBuilder(args);
+
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext()
+                .Filter.ByExcluding(x => x.Properties.TryGetValue("Method", out var value) && value?.ToString() == "\"GET\"")
+                .CreateLogger();
+
+            builder.Host.UseSerilog(logger);
 
             // Add services to the container.
             builder.Services.AddControllers()
@@ -46,7 +59,7 @@ namespace Server
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
-
+            app.UseSerilogRequestLogging();
             app.Run();
         }
     }
