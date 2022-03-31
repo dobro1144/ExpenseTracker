@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MsSql", "DataAccess.MsSql\DataAccess.MsSql.csproj", "{A65AA075-1F3B-4FB3-81E9-6100318E0FE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{51208794-2FC9-4622-9DAB-1F16738DB8B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCases", "UseCases\UseCases.csproj", "{51208794-2FC9-4622-9DAB-1F16738DB8B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{1CA6177D-7CF8-46A0-87F6-9E8948427A80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{51208794-2FC9-4622-9DAB-1F16738DB8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51208794-2FC9-4622-9DAB-1F16738DB8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51208794-2FC9-4622-9DAB-1F16738DB8B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CA6177D-7CF8-46A0-87F6-9E8948427A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CA6177D-7CF8-46A0-87F6-9E8948427A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CA6177D-7CF8-46A0-87F6-9E8948427A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CA6177D-7CF8-46A0-87F6-9E8948427A80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
