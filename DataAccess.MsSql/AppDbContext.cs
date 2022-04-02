@@ -35,12 +35,14 @@ namespace DataAccess.MsSql
 
             modelBuilder.Entity<Account>().Property(x => x.Timestamp).IsRowVersion();
             modelBuilder.Entity<Account>().HasIndex(x => new { x.UserId, x.Name }).IsUnique();
+            modelBuilder.Entity<Account>().HasOne(x => x.User).WithMany(x => x.Accounts).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Account>().HasData(
                 new Account { Id = 1, UserId = 1, Name = "Main account" }
             );
 
             modelBuilder.Entity<Category>().Property(x => x.Timestamp).IsRowVersion();
             modelBuilder.Entity<Category>().HasIndex(x => new { x.UserId, x.Name }).IsUnique();
+            modelBuilder.Entity<Category>().HasOne(x => x.User).WithMany(x => x.Categories).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, UserId = 1, Name = "Food" },
                 new Category { Id = 2, UserId = 1, Name = "Transport" },
@@ -50,8 +52,11 @@ namespace DataAccess.MsSql
             );
 
             modelBuilder.Entity<Income>().Property(x => x.Timestamp).IsRowVersion();
+            modelBuilder.Entity<Income>().HasOne(x => x.Account).WithMany(x => x.Incomes).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Expense>().Property(x => x.Timestamp).IsRowVersion();
+            modelBuilder.Entity<Expense>().HasOne(x => x.Account).WithMany(x => x.Expenses).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Expense>().HasOne(x => x.Category).WithMany(x => x.Expenses).OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
         }
