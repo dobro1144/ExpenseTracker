@@ -22,52 +22,18 @@ namespace UseCases.Account.Queries.GetAll
 
         public async Task<AccountBalanceDto[]> Handle(GetAllAccountsQuery request, CancellationToken cancellationToken)
         {
-            var accounts= await _dbContext.Accounts
+            return await _dbContext.Accounts
                 .Where(x => x.UserId == _currentUserService.Id)
-                .ToListAsync(cancellationToken);
-            var accountIds = accounts
-                .Select(x => x.Id)
-                .ToList();
-
-            var expenses = _dbContext.Expenses
-                .Where(x => accountIds.Contains(x.AccountId))
-                .GroupBy(x => x.AccountId)
-                .Select(x => new {
-                    Id = x.Key,
-                    AmountSum = -x.Select(x => x.Amount).Sum()
-                });
-
-            var incomes = _dbContext.Incomes
-                .Where(x => accountIds.Contains(x.AccountId))
-                .GroupBy(x => x.AccountId)
-                .Select(x => new {
-                    Id = x.Key,
-                    AmountSum = x.Select(x => x.Amount).Sum()
-                });
-
-            var resultDtoList = await expenses.Concat(incomes)
-                .GroupBy(x => x.Id)
+                .Include(x => x.Incomes)
+                .Include(x => x.Expenses)
                 .Select(x => new AccountBalanceDto {
-                    Id = x.Key,
-                    UserId = _currentUserService.Id,
-                    Balance = x.Select(x => x.AmountSum).Sum()
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    Name = x.Name,
+                    Timestamp = x.Timestamp,
+                    Balance = x.Incomes.Sum(x => x.Amount) - x.Expenses.Sum(x => x.Amount)
                 })
-                .ToListAsync(cancellationToken);
-
-            foreach (var dto in resultDtoList)
-                dto.Name = accounts.First(x => x.Id == dto.Id).Name;
-
-            // accounts without any expenses and incomes
-            foreach (var account in accounts.ExceptBy(resultDtoList.Select(x => x.Id), x => x.Id)) {
-                resultDtoList.Add(new AccountBalanceDto {
-                    Id = account.Id,
-                    UserId = account.UserId,
-                    Name = account.Name,
-                    Balance = 0.0
-                });
-            }
-
-            return resultDtoList.ToArray();
+                .ToArrayAsync();
         }
     }
 }

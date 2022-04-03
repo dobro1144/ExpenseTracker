@@ -6,5 +6,6 @@
         public int UserId { get; set; }
         public string Name { get; set; } = null!;
         public double Balance { get; set; }
+        public byte[] Timestamp { get; set; } = null!;
     }
 }
