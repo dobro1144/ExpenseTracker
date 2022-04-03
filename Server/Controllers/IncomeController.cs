@@ -30,7 +30,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IncomeDto>> GetAsync([FromRoute]int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<IncomeDto>> GetAsync([FromRoute] int id, CancellationToken cancellationToken)
         {
             var item = await _sender.Send(new GetIncomeByIdQuery { Id = id }, cancellationToken);
             return Ok(item);
@@ -44,14 +44,14 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute]int id, [FromBody] UpdateIncomeDto updateItem, CancellationToken cancellationToken)
+        public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute] int id, [FromBody] UpdateIncomeDto updateItem, CancellationToken cancellationToken)
         {
             var timestamp = await _sender.Send(new UpdateIncomeCommand { Id = id, Dto = updateItem }, cancellationToken);
             return Ok(timestamp);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromBody]string timestamp, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id, [FromBody] string timestamp, CancellationToken cancellationToken)
         {
             await _sender.Send(new DeleteIncomeCommand { Id = id, Timestamp = timestamp }, cancellationToken);
             return NoContent();
