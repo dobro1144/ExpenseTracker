@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UseCases.Account.Commands.Create;
 using UseCases.Account.Commands.Delete;
+using UseCases.Account.Commands.MoveEntries;
 using UseCases.Account.Commands.Update;
 using UseCases.Account.Dto;
 using UseCases.Account.Queries.GetAll;
@@ -30,7 +31,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDto>> GetAsync([FromRoute]int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<AccountDto>> GetAsync([FromRoute] int id, CancellationToken cancellationToken)
         {
             var item = await _sender.Send(new GetAccountByIdQuery { Id = id }, cancellationToken);
             return Ok(item);
@@ -44,16 +45,23 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute]int id, [FromBody] UpdateAccountDto updateItem, CancellationToken cancellationToken)
+        public async Task<ActionResult<byte[]>> UpdateAsync([FromRoute] int id, [FromBody] UpdateAccountDto updateItem, CancellationToken cancellationToken)
         {
             var timestamp = await _sender.Send(new UpdateAccountCommand { Id = id, Dto = updateItem }, cancellationToken);
             return Ok(timestamp);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int id, [FromBody] string timestamp, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id, [FromBody] string timestamp, CancellationToken cancellationToken)
         {
             await _sender.Send(new DeleteAccountCommand { Id = id, Timestamp = timestamp }, cancellationToken);
+            return NoContent();
+        }
+
+        [HttpPost("moveentries")]
+        public async Task<IActionResult> MoveEntriesAsync([FromBody] MoveAccountEntriesDto dto, CancellationToken cancellationToken)
+        {
+            await _sender.Send(new MoveAccountEntriesCommand { Dto = dto }, cancellationToken);
             return NoContent();
         }
     }
