@@ -33,7 +33,7 @@ namespace UseCases.Account.Queries.GetAll
                     Timestamp = x.Timestamp,
                     Balance = x.Incomes.Sum(x => x.Amount) - x.Expenses.Sum(x => x.Amount)
                 })
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
         }
     }
 }
